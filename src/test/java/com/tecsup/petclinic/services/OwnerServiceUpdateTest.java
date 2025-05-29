@@ -14,12 +14,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Slf4j
-@Transactional // Cada test se ejecuta en una transacción que se revierte al final
+@Transactional
 public class OwnerServiceUpdateTest {
 
     @Autowired
     private OwnerService ownerService;
-
+//vefica que que pueda actualizar exitosamente
     @Test
     public void testUpdateOwnerSuccessfully() {
 
