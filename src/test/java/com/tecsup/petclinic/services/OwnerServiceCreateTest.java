@@ -1,7 +1,7 @@
-package com.tecsup.petclinic.services; // O el paquete de pruebas que usen
+package com.tecsup.petclinic.services;
 
 import com.tecsup.petclinic.entities.Owner;
-import com.tecsup.petclinic.services.OwnerService; // Asegúrate de tener la interfaz y la implementación
+import com.tecsup.petclinic.services.OwnerService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringBootTest
 @Slf4j
-@Transactional // <--- Recomendado para aislar las pruebas
+@Transactional
 public class OwnerServiceCreateTest {
 
     @Autowired
@@ -40,7 +40,6 @@ public class OwnerServiceCreateTest {
         assertEquals(city, createdOwner.getCity());
         assertEquals(telephone, createdOwner.getTelephone());
 
-        // Opcional: Verificar directamente con findById para asegurar que está en la BBDD
         try {
             Owner foundOwner = ownerService.findById(createdOwner.getId());
             assertNotNull(foundOwner);
@@ -52,12 +51,11 @@ public class OwnerServiceCreateTest {
 
     @Test
     public void testCreateOwnerWithEmptyTelephone() {
-        // Suponiendo que el teléfono puede ser vacío pero no nulo según la BBDD (VARCHAR)
         String firstName = "Ana";
         String lastName = "Gomez";
         String address = "Calle Sol 456";
         String city = "Arequipa";
-        String telephone = ""; // Teléfono vacío
+        String telephone = "";
 
         Owner newOwner = new Owner(firstName, lastName, address, city, telephone);
         Owner createdOwner = ownerService.create(newOwner);
@@ -69,9 +67,6 @@ public class OwnerServiceCreateTest {
         assertEquals(telephone, createdOwner.getTelephone(), "Telephone should be empty.");
     }
 
-    // Podrías añadir más casos:
-    // - Crear Owner con datos nulos donde la BBDD lo permita (si aplica).
-    // - (Más avanzado) Si tuvieras validaciones a nivel de servicio (antes de la BBDD)
-    //   para campos obligatorios no cubiertos por `NOT NULL` en BBDD, probarías
-    //   que se lancen las excepciones correspondientes.
+
+
 }
