@@ -78,15 +78,14 @@ public class OwnerServiceReadTest {
 
     @Test
     public void testFindOwnerByIdNotFound() {
-        Integer nonExistentId = -99; // Un ID que seguramente no existe
+        Integer nonExistentId = -99;
         log.info("Attempting to find owner by non-existent ID: " + nonExistentId);
 
-        // Usar assertThrows es más idiomático en JUnit 5
         Exception exception = assertThrows(OwnerNotFoundException.class, () -> {
             ownerService.findById(nonExistentId);
         }, "OwnerNotFoundException should be thrown for non-existent ID.");
 
-        log.info("Exception message: " + exception.getMessage()); // Opcional: verificar el mensaje
+        log.info("Exception message: " + exception.getMessage());
         assertTrue(exception.getMessage().contains("Owner not found with ID: " + nonExistentId));
     }
 
@@ -113,10 +112,8 @@ public class OwnerServiceReadTest {
         assertNotNull(owners);
         assertEquals(expectedCount, owners.size(), "Should find " + expectedCount + " owners with last name '" + lastNameToFind + "'.");
 
-        // Verificar que los dueños correctos están en la lista
         assertTrue(owners.stream().anyMatch(o -> o.getId().equals(owner1Id)));
         assertTrue(owners.stream().anyMatch(o -> o.getId().equals(ownerSameLastNameId)));
-        // Asegurarse de que owner2 (Chavez) NO está
         assertFalse(owners.stream().anyMatch(o -> o.getId().equals(owner2Id)));
     }
 
@@ -170,11 +167,11 @@ public class OwnerServiceReadTest {
     // PRUEBAS PARA EL TELEFONO
     @Test
     public void testFindOwnersByTelephone() {
-        String telephoneToFind = "111111111"; // Teléfono de owner1
+        String telephoneToFind = "111111111";
         int expectedCount = 1;
         log.info("Attempting to find owners by telephone: " + telephoneToFind);
 
-        List<Owner> owners = ownerService.findByTelephone(telephoneToFind); // Asume que este método existe en OwnerService
+        List<Owner> owners = ownerService.findByTelephone(telephoneToFind);
         assertNotNull(owners);
         assertEquals(expectedCount, owners.size());
         assertEquals(owner1Id, owners.get(0).getId());
