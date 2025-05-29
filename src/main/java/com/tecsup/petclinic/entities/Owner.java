@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public class Owner {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // ID autogenerado por la base de datos
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "first_name") // Mapea a la columna 'first_name'
@@ -28,10 +28,6 @@ public class Owner {
 
     @Column(name = "telephone") // Mapea a la columna 'telephone'
     private String telephone;
-
-    // Si quisieras mapear la relación con Pet (opcional, basado en el estilo de Pet.java que solo usa IDs)
-    // @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner") // 'owner' sería el campo en la entidad Pet que referencia a Owner
-    // private Set<Pet> pets = new HashSet<>();
 
     // Constructor vacío (requerido por JPA)
     public Owner() {
