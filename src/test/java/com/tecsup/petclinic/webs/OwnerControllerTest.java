@@ -1,6 +1,7 @@
 package com.tecsup.petclinic.webs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
 import com.tecsup.petclinic.dtos.OwnerDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -88,5 +90,26 @@ public class OwnerControllerTest {
         mockMvc.perform(get("/owners/" + ID_NOT_FOUND))
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    public void testDeleteOwner() throws Exception {
+        OwnerDTO newOwner = new OwnerDTO(null, "Yudith", "Pacco", " calle guirnaldas n18 santa anita", "Lima", "931840727");
+
+        ResultActions mvcActions = mockMvc.perform(post("/owners")
+                        .content(om.writeValueAsString(newOwner))
+                        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isCreated());
+
+        String response = mvcActions.andReturn().getResponse().getContentAsString();
+        Integer id = JsonPath.parse(response).read("$.id");
+
+        mockMvc.perform(delete("/owners/" + id))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/owners/" + id))
+                .andExpect(status().isNotFound());
+    }
+
 
 }
