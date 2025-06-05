@@ -58,7 +58,6 @@ public class OwnerController {
     @PutMapping(value = "/owners/{id}")
     public ResponseEntity<OwnerDTO> update(@RequestBody OwnerDTO ownerDTO, @PathVariable Integer id) {
         try {
-            // Asignamos el ID del path al DTO para asegurar consistencia
             ownerDTO.setId(id);
             Owner ownerToUpdate = this.ownerMapper.toOwner(ownerDTO);
             Owner updatedOwner = this.ownerService.update(ownerToUpdate);

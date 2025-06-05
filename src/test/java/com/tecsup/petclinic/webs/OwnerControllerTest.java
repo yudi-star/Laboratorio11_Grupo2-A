@@ -110,6 +110,37 @@ public class OwnerControllerTest {
         mockMvc.perform(get("/owners/" + id))
                 .andExpect(status().isNotFound());
     }
+    @Test
+    public void testUpdateOwnerAndFlow() throws Exception {
+        OwnerDTO ownerToCreate = new OwnerDTO(null, "Bill", "Gates", "1835 73rd Ave NE", "Medina", "555123456");
+
+        ResultActions createResult = mockMvc.perform(post("/owners")
+                        .content(om.writeValueAsString(ownerToCreate))
+                        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isCreated());
+
+        String responseBody = createResult.andReturn().getResponse().getContentAsString();
+        Integer ownerId = JsonPath.parse(responseBody).read("$.id");
+
+        String UPDATED_CITY = "Lima";
+        String UPDATED_TELEPHONE = "999999999";
+
+        OwnerDTO ownerToUpdate = new OwnerDTO(ownerId, "Bill", "Gates", "1835 73rd Ave NE", UPDATED_CITY, UPDATED_TELEPHONE);
+
+        mockMvc.perform(put("/owners/" + ownerId)
+                        .content(om.writeValueAsString(ownerToUpdate))
+                        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/owners/" + ownerId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(ownerId)))
+                .andExpect(jsonPath("$.firstName", is("Bill")))
+                .andExpect(jsonPath("$.city", is(UPDATED_CITY)))
+                .andExpect(jsonPath("$.telephone", is(UPDATED_TELEPHONE)));
+    }
 
 
 }
