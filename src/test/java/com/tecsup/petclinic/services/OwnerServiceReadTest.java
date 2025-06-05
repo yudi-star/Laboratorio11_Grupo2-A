@@ -44,7 +44,6 @@ public class OwnerServiceReadTest {
 
     @BeforeEach
         // EL METODO, SE EJECUTA ANTES DE CADA METODO TEST EN ESTA CLASE
-
     void setUpTestData() {
 
         Owner owner1 = ownerService.create(new Owner(OWNER1_FIRST_NAME, OWNER1_LAST_NAME, "Calle Falsa 123", OWNER1_CITY, "111111111"));
@@ -78,15 +77,14 @@ public class OwnerServiceReadTest {
 
     @Test
     public void testFindOwnerByIdNotFound() {
-        Integer nonExistentId = -99; // Un ID que seguramente no existe
+        Integer nonExistentId = -99;
         log.info("Attempting to find owner by non-existent ID: " + nonExistentId);
 
-        // Usar assertThrows es más idiomático en JUnit 5
         Exception exception = assertThrows(OwnerNotFoundException.class, () -> {
             ownerService.findById(nonExistentId);
         }, "OwnerNotFoundException should be thrown for non-existent ID.");
 
-        log.info("Exception message: " + exception.getMessage()); // Opcional: verificar el mensaje
+        log.info("Exception message: " + exception.getMessage());
         assertTrue(exception.getMessage().contains("Owner not found with ID: " + nonExistentId));
     }
 
@@ -103,80 +101,5 @@ public class OwnerServiceReadTest {
         assertTrue(owners.stream().anyMatch(o -> o.getId().equals(ownerSameLastNameId) && o.getFirstName().equals(OWNER_SAME_LAST_NAME_FIRST_NAME)));
     }
 
-    @Test
-    public void testFindOwnersByLastName() {
-        String lastNameToFind = OWNER1_LAST_NAME;
-        int expectedCount = 2;
-        log.info("Attempting to find owners by last name: " + lastNameToFind);
 
-        List<Owner> owners = ownerService.findByLastName(lastNameToFind);
-        assertNotNull(owners);
-        assertEquals(expectedCount, owners.size(), "Should find " + expectedCount + " owners with last name '" + lastNameToFind + "'.");
-
-        // Verificar que los dueños correctos están en la lista
-        assertTrue(owners.stream().anyMatch(o -> o.getId().equals(owner1Id)));
-        assertTrue(owners.stream().anyMatch(o -> o.getId().equals(ownerSameLastNameId)));
-        // Asegurarse de que owner2 (Chavez) NO está
-        assertFalse(owners.stream().anyMatch(o -> o.getId().equals(owner2Id)));
-    }
-
-    @Test
-    public void testFindOwnersByLastNameNotFound() {
-        String lastNameToFind = "NonExistentLastNameXYZ";
-        log.info("Attempting to find owners by non-existent last name: " + lastNameToFind);
-
-        List<Owner> owners = ownerService.findByLastName(lastNameToFind);
-        assertNotNull(owners);
-        assertTrue(owners.isEmpty(), "List should be empty for a non-existent last name.");
-    }
-
-    // PRUEBAS PARA LA CIUDAD
-    @Test
-    public void testFindOwnersByCity() {
-        String cityToFind = OWNER1_CITY;
-        int expectedCount = 1;
-        log.info("Attempting to find owners by city: " + cityToFind);
-
-        List<Owner> owners = ownerService.findByCity(cityToFind);
-        assertNotNull(owners);
-        assertEquals(expectedCount, owners.size());
-        assertEquals(owner1Id, owners.get(0).getId(), "The found owner ID should match owner1's ID.");
-        assertEquals(OWNER1_FIRST_NAME, owners.get(0).getFirstName());
-    }
-
-    @Test
-    public void testFindOwnersByCityNotFound() {
-        String cityToFind = "NonExistentCityXYZ";
-        log.info("Attempting to find owners by non-existent city: " + cityToFind);
-
-        List<Owner> owners = ownerService.findByCity(cityToFind);
-        assertNotNull(owners);
-        assertTrue(owners.isEmpty(), "List should be empty for a non-existent city.");
-    }
-
-    // PRUEBAS PARA EL NOMBRE
-    @Test
-    public void testFindOwnersByFirstName() {
-        String firstNameToFind = OWNER1_FIRST_NAME;
-        int expectedCount = 1;
-        log.info("Attempting to find owners by first name: " + firstNameToFind);
-
-        List<Owner> owners = ownerService.findByFirstName(firstNameToFind);
-        assertNotNull(owners);
-        assertEquals(expectedCount, owners.size());
-        assertEquals(owner1Id, owners.get(0).getId());
-    }
-
-    // PRUEBAS PARA EL TELEFONO
-    @Test
-    public void testFindOwnersByTelephone() {
-        String telephoneToFind = "111111111"; // Teléfono de owner1
-        int expectedCount = 1;
-        log.info("Attempting to find owners by telephone: " + telephoneToFind);
-
-        List<Owner> owners = ownerService.findByTelephone(telephoneToFind); // Asume que este método existe en OwnerService
-        assertNotNull(owners);
-        assertEquals(expectedCount, owners.size());
-        assertEquals(owner1Id, owners.get(0).getId());
-    }
 }

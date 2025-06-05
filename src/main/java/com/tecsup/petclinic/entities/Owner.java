@@ -14,26 +14,24 @@ public class Owner {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "first_name") // Mapea a la columna 'first_name'
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "last_name") // Mapea a la columna 'last_name'
+    @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "address") // Mapea a la columna 'address'
+    @Column(name = "address")
     private String address;
 
-    @Column(name = "city") // Mapea a la columna 'city'
+    @Column(name = "city")
     private String city;
 
-    @Column(name = "telephone") // Mapea a la columna 'telephone'
+    @Column(name = "telephone")
     private String telephone;
 
-    // Constructor vacío (requerido por JPA)
     public Owner() {
     }
 
-    // Constructor para crear nuevos Owners (sin ID, ya que se autogenera)
     public Owner(String firstName, String lastName, String address, String city, String telephone) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -42,7 +40,6 @@ public class Owner {
         this.telephone = telephone;
     }
 
-    // Constructor con todos los campos (útil para pruebas o mapeo desde otras fuentes)
     public Owner(Integer id, String firstName, String lastName, String address, String city, String telephone) {
         this.id = id;
         this.firstName = firstName;
