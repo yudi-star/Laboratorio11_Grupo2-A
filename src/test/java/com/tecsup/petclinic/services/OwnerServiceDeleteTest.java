@@ -20,8 +20,13 @@ import static org.junit.jupiter.api.Assertions.fail;
 @Transactional
 public class OwnerServiceDeleteTest {
 
+
+
+
     @Autowired
     private OwnerService ownerService;
+
+
 
 
 
