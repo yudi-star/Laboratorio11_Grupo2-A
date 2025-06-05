@@ -50,4 +50,43 @@ public class OwnerControllerTest {
                 .andExpect(jsonPath("$.city", is(CITY)));
 
     }
+
+
+    @Test
+    public void testFindAllOwners() throws Exception {
+        OwnerDTO owner1 = new OwnerDTO(null, "Steve", "Jobs", "1 Infinite Loop", "Cupertino", "111222333");
+
+        mockMvc.perform(post("/owners")
+                        .content(om.writeValueAsString(owner1))
+                        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+
+        OwnerDTO owner2 = new OwnerDTO(null, "Mark", "Zuckerberg", "1 Hacker Way", "Menlo Park", "444555666");
+
+        mockMvc.perform(post("/owners")
+                        .content(om.writeValueAsString(owner2))
+                        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(get("/owners"))
+                .andDo(print())
+
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+
+                .andExpect(jsonPath("$[0].firstName", is("Steve")))
+                .andExpect(jsonPath("$[0].lastName", is("Jobs")))
+                .andExpect(jsonPath("$[1].firstName", is("Mark")))
+                .andExpect(jsonPath("$[1].city", is("Menlo Park")));
+    }
+
+
+
+    @Test
+    public void testFindOwnerKO() throws Exception {
+        int ID_NOT_FOUND = 666;
+        mockMvc.perform(get("/owners/" + ID_NOT_FOUND))
+                .andExpect(status().isNotFound());
+    }
+
 }
